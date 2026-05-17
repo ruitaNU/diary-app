@@ -54,3 +54,117 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日記アプリ</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f7f7f7;
+        }
+        h1 {
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .quick-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .quick-buttons button {
+            flex: 1;
+            padding: 10px;
+            background: #2196F3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>日記アプリ</h1>
+
+    <!-- 今日・昨日ボタン -->
+    <div class="quick-buttons">
+        <button onclick="goToday()">今日</button>
+        <button onclick="goYesterday()">昨日</button>
+    </div>
+
+    <!-- カレンダー -->
+    <input type="date" id="datePicker">
+
+    <!-- 日記本文 -->
+    <textarea id="diary" placeholder="今日の出来事を書こう…"></textarea>
+    <button onclick="saveDiary()">保存する</button>
+
+    <script>
+        const datePicker = document.getElementById("datePicker");
+        const diary = document.getElementById("diary");
+
+        // 今日の日付をセット
+        const today = new Date().toISOString().split("T")[0];
+        datePicker.value = today;
+
+        // 日付が変わったら読み込み
+        datePicker.addEventListener("change", loadDiary);
+
+        // 日記を読み込む
+        function loadDiary() {
+            const key = "diary_" + datePicker.value;
+            diary.value = localStorage.getItem(key) || "";
+        }
+
+        // 日記を保存
+        function saveDiary() {
+            const key = "diary_" + datePicker.value;
+            localStorage.setItem(key, diary.value);
+            alert("保存しました！");
+        }
+
+        // 今日ボタン
+        function goToday() {
+            datePicker.value = today;
+            loadDiary();
+        }
+
+        // 昨日ボタン
+        function goYesterday() {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            const y = d.toISOString().split("T")[0];
+            datePicker.value = y;
+            loadDiary();
+        }
+
+        // 初期読み込み
+        loadDiary();
+    </script>
+
+</body>
+</html>
